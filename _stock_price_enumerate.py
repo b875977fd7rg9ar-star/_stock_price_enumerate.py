@@ -6,6 +6,7 @@ import requests
 import datetime
 import schedule
 import time
+import pytz
 
 #BRAND_NAME_JSON = r'C:\Users\b8759\Desktop\Python\株価通知アプリ\brand_name.json'
 
@@ -98,7 +99,9 @@ class _stock_price_enumerate():
         def _push_info(self,msg_list):
             
             #時間と日付を取得
-            dt_now = datetime.datetime.now()
+            #dt_now = datetime.datetime.now()
+			jst = pytz.timezone('Asia/Tokyo')
+			now = datetime.now(jst)
             date = dt_now.strftime('%m月%d日 %H:%M')
 
             #メッセージ内容

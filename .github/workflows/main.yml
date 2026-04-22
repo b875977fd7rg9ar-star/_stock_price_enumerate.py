@@ -23,4 +23,4 @@ jobs:
         run: pip install schedule
 
       - name: スクリプト実行
-        run: python test.py
+        run: python _stock_price_enumerate.py

@@ -3,7 +3,7 @@ import warnings
 import os
 import json
 import requests
-import datetime
+from datetime import datetime
 import schedule
 import time
 import pytz

@@ -100,9 +100,9 @@ class _stock_price_enumerate():
             
             #時間と日付を取得
             #dt_now = datetime.datetime.now()
-			jst = pytz.timezone('Asia/Tokyo')
-			now = datetime.now(jst)
-            date = dt_now.strftime('%m月%d日 %H:%M')
+            jst = pytz.timezone('Asia/Tokyo')
+            now = datetime.now(jst)
+            date = now.strftime('%m月%d日 %H:%M')
 
             #メッセージ内容
             msg_hed = ('【{0}の株価情報】'.format(date))

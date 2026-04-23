@@ -2,7 +2,8 @@ name: Run Python Script
 
 on:
   schedule:
-    - cron: '0 09 * * *'
+    #- cron: '0 09 * * *'
+    - cron: '10 12 * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,8 +20,6 @@ jobs:
 
       - name: ライブラリインストール
         run: pip install yfinance
-      - name: ライブラリインストール
-        run: pip install schedule
 
       - name: スクリプト実行
         run: python _stock_price_enumerate.py

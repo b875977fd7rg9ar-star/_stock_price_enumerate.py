@@ -4,7 +4,7 @@ import os
 import json
 import requests
 from datetime import datetime
-import schedule
+#import schedule
 import time
 import pytz
 

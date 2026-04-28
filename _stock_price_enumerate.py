@@ -3,17 +3,16 @@ import warnings
 import os
 import json
 import requests
-from datetime import datetime
-#import schedule
+import datetime
+import schedule
 import time
-import pytz
 
-#BRAND_NAME_JSON = r'C:\Users\b8759\Desktop\Python\株価通知アプリ\brand_name.json'
-
-BRAND_NAME_JSON = 'brand_name.json'
+BRAND_NAME_JSON = r'C:\Users\b8759\Desktop\Python\株価通知アプリ\brand_name.json'
 TOKEN = 'HrHYXA5u/d2Vxi5A+W6V6HuIA828L0sL3v0NP1GXHDMpJq/MHDjZg56wQ1kTl0+ilHBaGMidjb/33Iq6IfOzHJxySUSzvzUUCIhbl/dbBtTwQ6t4HA6x4ivl90BGkB2en21n0CdgnOQ10nkDH/JB3AdB04t89/1O/w1cDnyilFU='
+#TOKEN = 'lqsHGJFJ2qUayJ2aeppSAr2Eel+FeLnFgUKWC5dVrR5qfBPQAvfpbGYb03EDxFXl7q0/4citnlWyK9MhykwnDHP8o5OVKzonX7/ZfAJkKqctfV0NSgGFBbmy+QEvs7DXm4myjVicg4H3ss+Zzp5BZQdB04t89/1O/w1cDnyilFU='
 API_URL = 'https://api.line.me/v2/bot/message/push'
 USER_ID = 'U0b7e03952b35d3288a55070e63f5edaf'
+#USER_ID =  'U27b8337b2a1b8941e2a86c4203db725b'
 LINE_SEP = '\n'
 T = '.T'
 TOKEN_INF = { 'Authorization': 'Bearer' + ' ' + TOKEN,
@@ -71,22 +70,52 @@ class _stock_price_enumerate():
                #ヤフーファイナンスからデータ取得
                rcv = yahoo.Ticker(data)
 
-               #PERの情報を選んで取得
-               rcv_cal = rcv.info.get('trailingPE')
+               #株価取得
+               rcv_pri = rcv.info.get('currentPrice')
+               
+               #例外処理は表示しない   
+               warnings.simplefilter('ignore')
+
+               if not rcv_pri == None:
+                    fin_pri = int(float(rcv_pri))
+
+               #情報が取れない時は情報無し
+               else:
+                    fin_pri = '情報無し'
+
+
+               #前日の株価を取得して前日比を出す
+               rcv_lpri = rcv.info.get('previousClose')
+               
+               #例外処理は表示しない   
+               warnings.simplefilter('ignore')
+
+               if not rcv_lpri == None and not fin_pri == None:   
+                    res = fin_pri / rcv_lpri
+                    price_change = int(round(res * 100, 0))
+
+               #情報が取れない時は情報無し
+               else:
+                    price_change = '情報無し'
+
+               #PER取得
+               rcv_per = rcv.info.get('trailingPE')
 
                #例外処理は表示しない   
                warnings.simplefilter('ignore')
 
-               if not rcv_cal == None:
-                    rcv_rst = round(float(rcv_cal), 1)
+               if not rcv_per == None:
+                    fin_per = round(float(rcv_per), 1)
 
                #情報が取れない時は情報無し
                else:
-                    rcv_rst = '情報無し'
+                    fin_per = '情報無し'
 
                #取得した情報を通知で飛ばすためのメッセージの準備
                rcv_msg = ('■{0}の情報'.format(self.value_list[i]) + LINE_SEP + 
-                          'PER:{0}'.format(rcv_rst))
+                          '株価:{0}'.format(fin_pri) + LINE_SEP + 
+                          '前日比:{0}%'.format(price_change) + LINE_SEP +
+                          'PER:{0}'.format(fin_per))
                msg_list.append(rcv_msg)
                i = i + 1
              return msg_list
@@ -99,10 +128,8 @@ class _stock_price_enumerate():
         def _push_info(self,msg_list):
             
             #時間と日付を取得
-            #dt_now = datetime.datetime.now()
-            jst = pytz.timezone('Asia/Tokyo')
-            now = datetime.now(jst)
-            date = now.strftime('%m月%d日 %H:%M')
+            dt_now = datetime.datetime.now()
+            date = dt_now.strftime('%m月%d日 %H:%M')
 
             #メッセージ内容
             msg_hed = ('【{0}の株価情報】'.format(date))
@@ -131,20 +158,4 @@ if __name__ == '__main__':
 
      #インスタンス作成
      _stock_price_enumerate = _stock_price_enumerate()
-
-     #メイン処理実行
-     _stock_price_enumerate._main()
-
-     #スケジュール設定
-     #schedule.every().monday.at("19:00").do(_stock_price_enumerate._main)
-     #schedule.every().tuesday.at("19:00").do(_stock_price_enumerate._main)
-     #schedule.every().wednesday.at("19:00").do(_stock_price_enumerate._main)
-     #schedule.every().thursday.at("19:00").do(_stock_price_enumerate._main)
-     #schedule.every().friday.at("19:00").do(_stock_price_enumerate._main)
-
-     #テスト用
-     #schedule.every().sunday.at("15:02").do(_stock_price_enumerate._main)
-        
-     #while True:
-          #schedule.run_pending()
-          #time.sleep(1)
+     _stock_price_enumerate = _stock_price_enumerate._main()

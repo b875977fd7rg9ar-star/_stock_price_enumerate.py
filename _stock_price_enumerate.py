@@ -4,7 +4,7 @@ import os
 import json
 import requests
 import datetime
-import schedule
+#import schedule
 import time
 
 BRAND_NAME_JSON = r'C:\Users\b8759\Desktop\Python\株価通知アプリ\brand_name.json'

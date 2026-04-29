@@ -8,7 +8,9 @@ on:
 jobs:
   my_first_job:
     runs-on: ubuntu-latest
-
+    env:
+      TZ: Asia/Tokyo
+    
     steps:
       - uses: actions/checkout@v4
 

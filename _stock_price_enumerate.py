@@ -4,21 +4,37 @@ import os
 import json
 import requests
 import datetime
-#import schedule
 import time
+new_brand_lines = None
 
-BRAND_NAME_JSON = r'C:\Users\b8759\Desktop\Python\株価通知アプリ\brand_name.json'
-TOKEN = 'HrHYXA5u/d2Vxi5A+W6V6HuIA828L0sL3v0NP1GXHDMpJq/MHDjZg56wQ1kTl0+ilHBaGMidjb/33Iq6IfOzHJxySUSzvzUUCIhbl/dbBtTwQ6t4HA6x4ivl90BGkB2en21n0CdgnOQ10nkDH/JB3AdB04t89/1O/w1cDnyilFU='
+#テスト用
+#BRAND_NAME_JSON = r'C:\Users\b8759\Desktop\Python\株価通知アプリ\brand_name.json'
+#本番通知の情報
+#API_URL = 'https://api.line.me/v2/bot/message/push'
+#TOKEN = 'HrHYXA5u/d2Vxi5A+W6V6HuIA828L0sL3v0NP1GXHDMpJq/MHDjZg56wQ1kTl0+ilHBaGMidjb/33Iq6IfOzHJxySUSzvzUUCIhbl/dbBtTwQ6t4HA6x4ivl90BGkB2en21n0CdgnOQ10nkDH/JB3AdB04t89/1O/w1cDnyilFU='
+#USER_ID = 'U0b7e03952b35d3288a55070e63f5edaf'
+#メッセージテストの情報
 #TOKEN = 'lqsHGJFJ2qUayJ2aeppSAr2Eel+FeLnFgUKWC5dVrR5qfBPQAvfpbGYb03EDxFXl7q0/4citnlWyK9MhykwnDHP8o5OVKzonX7/ZfAJkKqctfV0NSgGFBbmy+QEvs7DXm4myjVicg4H3ss+Zzp5BZQdB04t89/1O/w1cDnyilFU='
+#USER_ID =  'U27b8337b2a1b8941e2a86c4203db725b'
+#LINE_SEP = '\n'
+#T = '.T'
+#TOKEN_INF = { 'Authorization': 'Bearer' + ' ' + TOKEN,
+#         'Content-Type': 'application/json'}
+
+#本番用
+BRAND_NAME_JSON = 'brand_name.json'
+#本番通知の情報
 API_URL = 'https://api.line.me/v2/bot/message/push'
+TOKEN = 'HrHYXA5u/d2Vxi5A+W6V6HuIA828L0sL3v0NP1GXHDMpJq/MHDjZg56wQ1kTl0+ilHBaGMidjb/33Iq6IfOzHJxySUSzvzUUCIhbl/dbBtTwQ6t4HA6x4ivl90BGkB2en21n0CdgnOQ10nkDH/JB3AdB04t89/1O/w1cDnyilFU='
 USER_ID = 'U0b7e03952b35d3288a55070e63f5edaf'
+#メッセージテストの情報
+#TOKEN = 'lqsHGJFJ2qUayJ2aeppSAr2Eel+FeLnFgUKWC5dVrR5qfBPQAvfpbGYb03EDxFXl7q0/4citnlWyK9MhykwnDHP8o5OVKzonX7/ZfAJkKqctfV0NSgGFBbmy+QEvs7DXm4myjVicg4H3ss+Zzp5BZQdB04t89/1O/w1cDnyilFU='
 #USER_ID =  'U27b8337b2a1b8941e2a86c4203db725b'
 LINE_SEP = '\n'
 T = '.T'
 TOKEN_INF = { 'Authorization': 'Bearer' + ' ' + TOKEN,
           'Content-Type': 'application/json'}
 
-new_brand_lines = None
 #-----------------------------------
 #メソッド名:_stock_price_enumerate
 #処理概要:登録済みの銘柄の情報を計算して通知する
